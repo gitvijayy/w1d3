@@ -33,130 +33,86 @@ var data = {
 
 
 function totalList(age) {
-
   var followList = {};
   var output = "";
-
   Object.keys(data).forEach(function(key) {
-
     var name = data[key]["name"];
     followList[name] = {};
     followList[name]["follows"] = following(data[key]["follows"],age);
     followList[name]["followers"] = follwedBy(key,age);
-
     });
-
   return output != "" ? output : followList;
-
 }
 
-
-
 function mostFollowers(age,type) {
-
   var result = [];
   var list = totalList(age);
-
   for (var key in list) {
-
     counter = 0;
-
     for (var key1 in list) {
-
       if(list[key][type].length < list[key1][type].length) {
         counter = 1;
         break;
       };
-
     };
-
     if(counter === 0) {result.push(key)};
-
   };
-
   return result;
 }
 
-
 function following(followId,age){
-
   var output = [];
-
   followId.forEach(function(id) {
-
     if(data[id]["age"] > age) {
       output.push(data[id]["name"]) ;
     }
-
   });
-
   return output;
 }
 
-
 function follwedBy(followId,age) {
-
   var output = [];
-
   for (var key in data) {
-
     if(data[key]["follows"].includes(followId) && data[key]["age"] > age) {
       output.push (data[key]["name"]);
     };
-
   };
-
   return output;
 }
 
 
 function followBack() {
-
   var followList = totalList(0);
   output = {};
-
   for (var key in followList) {
-
     output[key]=[];
-
     followList[key]["follows"].forEach(function(value) {
-
       if(!followList[key]["followers"].includes(value)) {
         output[key].push(value);
       }
-
     });
-
   }
-
   return output;
 }
 
 
 function reach() {
 
-list = totalList(0);
-var output = {};
-
-for (var keys in list) {
-  sum = list[keys].followers.length;
-
-  output[keys] = {};
-
-  list[keys].followers.forEach(function(value) {
-
-    if(list[value]["followers"].includes(value)) {
+  list = totalList(0);
+  var output = {};
+  for (var keys in list) {
+    sum = list[keys].followers.length;
+    output[keys] = {};
+    list[keys].followers.forEach(function(value) {
+      if(list[value]["followers"].includes(value)) {
       sum += list[value]["followers"].length - 1 ;
-    } else {
-      sum += list[value]["followers"].length;
-    }
-
-  });
-
-  output[keys] = sum;
-}
-
-return output;
+      } else {
+        sum += list[value]["followers"].length;
+      }
+    });
+    output[keys] = sum;
+  }
+  return output;
 }
 
 
