@@ -97,7 +97,6 @@ function followBack() {
 
 
 function reach() {
-
   list = totalList(0);
   var output = {};
   for (var keys in list) {
