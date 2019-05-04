@@ -32,43 +32,100 @@ var data = {
 };
 
 
-// List everyone and for each of them, list the names of who they follow and who follows them
-function totalList() {
+function totalList(age) {
 
-  var keys = Object.keys(data);
-  var list = {};
+  var followList = {};
+  var output = "";
 
-  keys.forEach(function(key) {
+  Object.keys(data).forEach(function(key) {
 
     var name = data[key]["name"];
-    list[name] = {};
-    list[name]["follows"] = following(data[key]["follows"]);
-    list[name]["followers"] = follwedBy(key);
+    followList[name] = {};
+    followList[name]["follows"] = following(data[key]["follows"],age);
+    followList[name]["followers"] = follwedBy(key,age);
 
-  });
+    });
 
-  console.log(list);
+  return output != "" ? output : followList;
 
 }
 
-function following(followId){
 
-  var output = followId.map (function(id) {
-    return data[id]["name"];
+
+function mostFollowers(age,type) {
+
+  var result = [];
+  var list = totalList(age);
+
+  for (var key in list) {
+
+    counter = 0;
+
+    for (var key1 in list) {
+
+      if(list[key][type].length < list[key1][type].length) {
+        counter = 1;
+        break;
+      };
+
+    };
+
+    if(counter === 0) {result.push(key)};
+
+  };
+
+  return result;
+}
+
+
+function following(followId,age){
+
+  var output = [];
+
+  followId.forEach(function(id) {
+
+    if(data[id]["age"] > age) {
+      output.push(data[id]["name"]) ;
+    }
+
   });
 
   return output;
 }
 
-function follwedBy(followId) {
+
+function follwedBy(followId,age) {
 
   var output = [];
 
   for (var key in data) {
 
-    if(data[key]["follows"].includes(followId)) {
+    if(data[key]["follows"].includes(followId) && data[key]["age"] > age) {
       output.push (data[key]["name"]);
     };
+
+  };
+
+  return output;
+}
+
+
+function followBack() {
+
+  var followList = totalList(0);
+  output = {};
+
+  for (var key in followList) {
+
+    output[key]=[];
+
+    followList[key]["follows"].forEach(function(value) {
+
+      if(!followList[key]["followers"].includes(value)) {
+        output[key].push(value);
+      }
+
+    });
 
   }
 
@@ -76,13 +133,53 @@ function follwedBy(followId) {
 }
 
 
-totalList();
+function reach() {
+
+list = totalList(0);
+var output = {};
+
+for (var keys in list) {
+  sum = list[keys].followers.length;
+
+  output[keys] = {};
+
+  list[keys].followers.forEach(function(value) {
+
+    if(list[value]["followers"].includes(value)) {
+      sum += list[value]["followers"].length - 1 ;
+    } else {
+      sum += list[value]["followers"].length;
+    }
+
+  });
+
+  output[keys] = sum;
+}
+
+return output;
+}
 
 
+console.log(totalList(0));
+console.log();
+console.log();
+console.log(mostFollowers(0,"followers") + " has the most followers");
+console.log();
+console.log(mostFollowers(0,"follows") + " follow most people");
+console.log();
+console.log(mostFollowers(30,"followers") + " has the most followers over 30")
+console.log();;
+console.log(mostFollowers(30,"follows") + " follows most people over 30");
+console.log();
+console.log(followBack());
+console.log();
+console.log(reach());
 
-// Identify who follows the most people
+// List everyone and for each of them, list the names of who they follow and who follows them//
+// Identify who follows the most people//
 // Identify who has the most followers
 // Identify who has the most followers over 30
 // Identify who follows the most people over 30
 // List those who follow someone that doesn't follow them back
 // List everyone and their reach (sum of # of followers and # of followers of followers)
+// // }
