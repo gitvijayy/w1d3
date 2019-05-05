@@ -44,22 +44,6 @@ function totalList(age) {
   return output != "" ? output : followList;
 }
 
-function mostFollowers(age,type) {
-  var result = [];
-  var list = totalList(age);
-  for (var key in list) {
-    counter = 0;
-    for (var key1 in list) {
-      if(list[key][type].length < list[key1][type].length) {
-        counter = 1;
-        break;
-      };
-    };
-    if(counter === 0) {result.push(key)};
-  };
-  return result;
-}
-
 function following(followId,age){
   var output = [];
   followId.forEach(function(id) {
@@ -78,6 +62,23 @@ function follwedBy(followId,age) {
     };
   };
   return output;
+}
+
+
+function mostFollowers(age,type) {
+  var result = [];
+  var list = totalList(age);
+  for (var key in list) {
+    counter = 0;
+    for (var key1 in list) {
+      if(list[key][type].length < list[key1][type].length) {
+        counter = 1;
+        break;
+      };
+    };
+    if(counter === 0) {result.push(key)};
+  };
+  return result;
 }
 
 
@@ -115,7 +116,7 @@ function reach() {
 }
 
 
-console.log(totalList(0));
+console.log(totalList(50));
 console.log();
 console.log();
 console.log(mostFollowers(0,"followers") + " has the most followers");
